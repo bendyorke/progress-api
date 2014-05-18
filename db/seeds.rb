@@ -1,5 +1,9 @@
 def log arr
-  puts "%02d %-15s seeded" %[arr.count, arr.map(&:class).uniq.first.to_s.pluralize(arr.count)]
+  plural_class = arr.map(&:class).uniq.first.to_s.pluralize(arr.count)
+  puts "--  Seed#{plural_class}: seeding ".ljust 79, "-"
+  puts "|| %-74s||" %["seed_object(:#{plural_class.tableize.singularize})"]
+  puts "|| -> %02d %-68s||" %[arr.count, "#{plural_class} seeded"]
+  puts "\n\n".rjust 81, "-"
 end
 # Create Muscle Groups
 #

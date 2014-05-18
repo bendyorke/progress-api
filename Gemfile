@@ -12,8 +12,9 @@ group :development do
   gem 'rspec-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'pry'
-  gem 'pry-debugger'
-  gem 'awesome_print'
-  gem 'hirb'
+  gem 'jazz_hands'
+end
+
+group :test do
+  gem 'jazz_hands'
 end

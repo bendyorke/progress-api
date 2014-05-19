@@ -1,6 +1,6 @@
 require 'faker'
 
-def log arr
+def seeded arr
   plural_class = arr.map(&:class).uniq.first.to_s.pluralize(arr.count)
   puts "--  Seed#{plural_class}: seeding ".ljust 79, "-"
   puts "|| %-74s||" %["seed_object(:#{plural_class.tableize.singularize})"]
@@ -12,7 +12,7 @@ end
 muscle_groups = %w[chest triceps biceps back legs abs].map do |muscle_group|
   MuscleGroup.create name: muscle_group
 end
-log muscle_groups
+seeded muscle_groups
 
 # Create ExerciseFields
 #
@@ -23,7 +23,7 @@ exercise_fields = %w[weight reps time].map do |exercise_field|
   ExerciseField.create name: exercise_field,
                        unit: unit_from_name[exercise_field]
 end
-log exercise_fields
+seeded exercise_fields
 
 # Create exercises
 #
@@ -43,31 +43,37 @@ end
 exercises = %w[chest triceps biceps back legs abs].map do |muscle_group|
   Exercise.create exercise_from_muscle_group[muscle_group]
 end
-log exercises
+seeded exercises
 
 # Create workouts
 #
 workouts = (1..4).map do
   Workout.create exercises: exercises.sample(3)
 end
-log workouts
+seeded workouts
 
 # Create users
 #
-users = (0..2).map do |i|
+users = [(
+  User.create first_name: "Ender",
+               last_name: "Pup",
+                  gender: "Male",
+               exercises: [] << exercises.first,
+                workouts: [] << workouts.first
+)]
+users += (1..3).map do |i|
   User.create first_name: Faker::Name.first_name,
                last_name: Faker::Name.last_name,
                   gender: %w|male female|.sample,
                exercises: [exercises[i]],
                 workouts: [workouts[i]]
 end
-admin = User.create first_name: "Ender",
-                     last_name: "Pup",
-                        gender: "Male",
-                     exercises: exercises[users.length..-1],
-                      workouts: workouts[users.length..-1]
-users << admin
-log users
+users += (4..9).map do
+  User.create first_name: Faker::Name.first_name,
+               last_name: Faker::Name.last_name,
+                  gender: %w|male female|.sample
+end
+seeded users
 
 # Create follows
 #
@@ -76,3 +82,4 @@ follows = users.map.with_index do |user|
   exercises.sample(3).each { |_| _.followers.push user }
   (users - [user]).sample.followers.push user
 end
+seeded follows

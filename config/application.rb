@@ -11,6 +11,9 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env)
 
+# Issue with faker gem and il8n
+I18n.enforce_available_locales = false
+
 module ProgressApi
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.

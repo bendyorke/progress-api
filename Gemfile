@@ -13,6 +13,7 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'jazz_hands'
+  gem 'faker'
 end
 
 group :test do

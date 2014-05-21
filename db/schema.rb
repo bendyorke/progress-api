@@ -15,26 +15,14 @@ ActiveRecord::Schema.define(version: 20140519010055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "exercise_fields", force: true do |t|
-    t.string   "name"
-    t.string   "unit"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+  enable_extension "hstore"
 
   create_table "exercises", force: true do |t|
     t.string   "name"
     t.text     "description"
     t.integer  "primary_muscle_group_id"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "exercises_exercise_fields", force: true do |t|
-    t.integer  "exercise_id"
-    t.integer  "exercise_field_id"
+    t.hstore   "fields"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -14,19 +14,11 @@ muscle_groups = %w[chest triceps biceps back legs abs].map do |muscle_group|
 end
 seeded muscle_groups
 
-# Create ExerciseFields
-#
-unit_from_name = { "weight" => "pound",
-                   "reps"   => "times",
-                   "time"   => "seconds" }
-exercise_fields = %w[weight reps time].map do |exercise_field|
-  ExerciseField.create name: exercise_field,
-                       unit: unit_from_name[exercise_field]
-end
-seeded exercise_fields
-
 # Create exercises
 #
+exercise_fields = { "weight" => "pound",
+                    "reps"   => "times",
+                    "time"   => "seconds" }
 exercise_from_muscle_group = {
   "chest"   => { name: "Bench Press" },
   "triceps" => { name: "Skull Crushers" },
@@ -35,12 +27,13 @@ exercise_from_muscle_group = {
   "legs"    => { name: "Curls in the Squat Rack" },
   "abs"     => { name: "Sit ups" }
 }.each do |k,v|
-  v.merge! exercise_fields: exercise_fields.sample(2),
-             muscle_groups: muscle_groups.sample(2),
-      primary_muscle_group: muscle_groups.select { |_| _.name == k }.first,
-               description: "Description of #{k}"
+  v.merge! muscle_groups: muscle_groups.sample(2),
+    primary_muscle_group: muscle_groups.select { |_| _.name == k }.first,
+                  fields: exercise_fields.to_a.sample(2).to_h,
+             description: "Description of #{k}"
 end
 exercises = %w[chest triceps biceps back legs abs].map do |muscle_group|
+  puts exercise_from_muscle_group[muscle_group][:fields].inspect
   Exercise.create exercise_from_muscle_group[muscle_group]
 end
 seeded exercises
@@ -81,5 +74,6 @@ follows = users.map.with_index do |user|
   workouts.sample.followers.push user
   exercises.sample(3).each { |_| _.followers.push user }
   (users - [user]).sample.followers.push user
-end
+  user.followings.to_a
+end.flatten
 seeded follows

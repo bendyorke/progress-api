@@ -12,10 +12,13 @@ group :development do
   gem 'rspec-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'jazz_hands'
   gem 'faker'
 end
 
-group :test do
+group :test, :development do
   gem 'jazz_hands'
+end
+
+group :test do
+  gem 'nyan-cat-formatter'
 end

@@ -9,5 +9,7 @@ class Exercise < ActiveRecord::Base
   belongs_to :primary_muscle_group, class_name: "MuscleGroup"
   belongs_to :user
 
-  store_accessor :fields, :reps, :weight, :time
+  include Configurable
+
+  config_accessor :fields, :reps, :weight, :time
 end

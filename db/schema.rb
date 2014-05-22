@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20140519010055) do
     t.integer  "followable_id"
     t.string   "followable_type"
     t.integer  "user_id"
+    t.hstore   "config"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

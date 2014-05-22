@@ -33,7 +33,6 @@ exercise_from_muscle_group = {
              description: "Description of #{k}"
 end
 exercises = %w[chest triceps biceps back legs abs].map do |muscle_group|
-  puts exercise_from_muscle_group[muscle_group][:fields].inspect
   Exercise.create exercise_from_muscle_group[muscle_group]
 end
 seeded exercises

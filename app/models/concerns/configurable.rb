@@ -1,45 +1,91 @@
 module Configurable
   extend ActiveSupport::Concern
 
+  included do
+    class_attribute :config_attributes, instance_accessor: false
+    self.config_attributes = {}
+  end
+
   module ClassMethods
-    def config_accessor field_name, *keys
-      keys.each do |key|
-        # Getter
-        define_method(key) do |**args|
-          if owner_of_configurable? args[:user_id]
-            (self.send field_name)[key.to_s]
-          else
-          end
-        end
+    def config_accessor config_attribute, *keys
+      keys = keys.flatten
 
-        # Setter
-        define_method("#{key}=") do |**args|
-          if owner_of_configurable? args[:user_id]
-            if args[:value].nil? || args[:value].empty?
-              self.send "clear_#{key}!", args
-            else
-              merged_hash =  (self.send field_name).merge(Hash[key.to_s, args[:value].to_s])
-              self.send "#{field_name}=", merged_hash
-            end
-          else
+      _config_accessors_module.module_eval do
+        keys.each do |key|
+          define_method(key) do |**args|
+            read_config_attribute config_attribute, key, args[:user_id]
           end
-        end
 
-        # Reset hstore
-        define_method("clear_#{key}!") do |**args|
-          if owner_of_configurable? args[:user_id]
-            cleared_hash = (self.send field_name).except key.to_s
-            self.send "#{field_name}=", cleared_hash
-          else
+          define_method("#{key}=") do |**args|
+            write_config_attribute config_attribute, key, args[:value], args[:user_id]
           end
         end
+      end
+
+      define_method("#{config_attribute}_has_changed!") do
+        self.send(config_attribute).reject! do |_,v|
+          v.empty?
+        end
+      end
+
+      self.config_attributes = {} if self.config_attributes.blank?
+      self.config_attributes[config_attribute] ||= []
+      self.config_attributes[config_attribute] |= keys
+    end
+
+    def _config_accessors_module
+      @_config_accessors_module ||= begin
+        mod = Module.new
+        include mod
+        mod
       end
     end
   end
 
-  private
+  protected
+    def read_config_attribute config_attribute, key, current_user
+      relationship = define_relationship_for current_user
+      relationship.read self, config_attribute, key.to_s, current_user
+    end
 
-    def owner_of_configurable? current_user_id
-      current_user_id == user_id
+    def write_config_attribute config_attribute, key, value, current_user
+      relationship = define_relationship_for current_user
+      relationship.write self, config_attribute, key.to_s, value.to_s, current_user
+    end
+
+  private
+    def define_relationship_for current_user_id
+      current_user_id == user_id ? Owner : Follower
+    end
+
+    class Accessor
+      def self.read object, attribute, key
+        object.public_send(attribute)[key]
+      end
+      def self.write object, attribute, key, value
+        if value != Accessor.read(object, attribute, key)
+          object.public_send :"#{attribute}_will_change!"
+          object.public_send(attribute)[key] = value
+          object.public_send :"#{attribute}_has_changed!"
+        end
+      end
+    end
+
+    class Owner < Accessor
+      def self.read *args
+        super *args[0..-2]
+      end
+      def self.write *args
+        super *args[0..-2]
+      end
+    end
+
+    class Follower < Accessor
+      def self.read object, attribute, key, current_user
+
+      end
+      def self.read object, attribute, key, value, current_user
+
+      end
     end
 end

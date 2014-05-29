@@ -4,7 +4,6 @@ class CreateFollows < ActiveRecord::Migration
       t.integer :followable_id
       t.string  :followable_type
       t.integer :user_id
-      t.hstore  :config
 
       t.timestamps
     end

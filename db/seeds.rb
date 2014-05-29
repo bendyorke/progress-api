@@ -1,10 +1,10 @@
 require 'faker'
 
-def seeded arr
+def seeded arr, desc = nil
   plural_class = arr.map(&:class).uniq.first.to_s.pluralize(arr.count)
   puts "--  Seed#{plural_class}: seeding ".ljust 79, "-"
   puts "|| %-74s||" %["seed_object(:#{plural_class.tableize.singularize})"]
-  puts "|| -> %02d %-68s||" %[arr.count, "#{plural_class} seeded"]
+  puts "|| -> %02d %-68s||" %[arr.count, "#{desc || plural_class} seeded"]
   puts "\n\n".rjust 81, "-"
 end
 # Create Muscle Groups
@@ -40,7 +40,9 @@ seeded exercises
 # Create workouts
 #
 workouts = (1..4).map do
-  Workout.create exercises: exercises.sample(3)
+  Workout.create exercises: exercises.sample(3),
+                      name: Faker::Commerce.product_name,
+               description: Faker::Lorem.sentence
 end
 seeded workouts
 
@@ -76,3 +78,12 @@ follows = users.map.with_index do |user|
   user.followings.to_a
 end.flatten
 seeded follows
+
+# Fork a workout
+#
+fork = workouts.sample.fork(user_id: users.first.id)
+seeded [fork], "Forked Workout"
+
+# Configure an exercise
+#
+

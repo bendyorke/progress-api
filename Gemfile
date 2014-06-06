@@ -18,14 +18,18 @@ group :development do
   gem 'guard-rspec'
   gem 'guard-bundler'
   gem 'guard-migrate'
+  gem 'guard-spork'
   gem 'rb-readline'
 end
 
 group :test, :development do
+  gem 'spork'
+  gem 'spork-rails'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
-  gem 'jazz_hands'
+  gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
+  gem 'pry-byebug'
 end
 
 group :test do

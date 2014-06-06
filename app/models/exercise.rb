@@ -8,4 +8,8 @@ class Exercise < ActiveRecord::Base
   has_many   :followers,       through: :follows, source: :user
   belongs_to :primary_muscle_group, class_name: "MuscleGroup"
   belongs_to :user
+
+  scope :where_workout,         -> (**params) { joins(:workouts).where(workouts: params) }
+  scope :include_config_where,  -> (**params) { includes(:exercise_configs).where(exercise_configs: params).references(:exercise_configs) }
+
 end

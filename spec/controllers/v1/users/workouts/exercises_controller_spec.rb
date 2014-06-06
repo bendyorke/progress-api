@@ -15,13 +15,13 @@ describe Api::V1::Users::Workouts::ExercisesController, :type => :controller do
   end
 
   context '#index' do
-    it 'returns the workouts for a user' do
+    it 'returns the exercises and configs for a workout' do
       user = create :user_with_workouts_with_exercises
 
       get :index, workout_id: user.workouts.last.id, user_id: user.id
 
       json = successful_json_response
-      puts json.inspect
+      expect(json['exercises'].first).to have_key "config"
     end
   end
 end

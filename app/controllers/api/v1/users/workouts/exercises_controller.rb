@@ -1,10 +1,10 @@
 class Api::V1::Users::Workouts::ExercisesController < Api::V1::V1ApplicationController
 
   def index
-    @config = ExerciseConfig
-      .where(workout_id: params[:workout_id], user_id: params[:user_id])
-      .includes :exercise, :workout
-    render :json => @config
+    @exercises = Exercise
+      .where_workout(id: params[:workout_id])
+      .include_config_where(workout_id: params[:workout_id], user_id: params[:user_id])
+    render :json => @exercises, each_serializer: ExerciseWithConfigSerializer
   end
 
   def create

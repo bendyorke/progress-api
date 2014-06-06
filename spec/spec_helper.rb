@@ -1,20 +1,31 @@
-ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
-require 'rspec/rails'
-require 'rspec/autorun'
+require 'rubygems'
+require 'spork'
+#uncomment the following line to use spork with the debugger
+#require 'spork/ext/ruby-debug'
 
-Dir[Rails.root.join("spec/support/**/*.rb")].each { |file| require file }
-Dir[Rails.root.join("spec/helpers/*.rb")].each     { |file| require file }
+Spork.prefork do
+  ENV["RAILS_ENV"] ||= 'test'
+  require File.expand_path("../../config/environment", __FILE__)
+  require 'rspec/rails'
+  require 'rspec/autorun'
 
-ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+  Dir[Rails.root.join("spec/support/**/*.rb")].each { |file| require file }
+  Dir[Rails.root.join("spec/helpers/*.rb")].each     { |file| require file }
 
-RSpec.configure do |config|
-  config.infer_base_class_for_anonymous_controllers = false
+  ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
-  config.order = "random"
+  RSpec.configure do |config|
+    config.infer_base_class_for_anonymous_controllers = false
 
-  # You shall not call FactoryGirl
-  config.include FactoryGirl::Syntax::Methods
+    config.order = "random"
 
-  config.include ControllerSpecHelpers, :type => :controller
+    # You shall not call FactoryGirl
+    config.include FactoryGirl::Syntax::Methods
+
+    config.include ControllerSpecHelpers, :type => :controller
+  end
+end
+
+Spork.each_run do
+  FactoryGirl.reload
 end

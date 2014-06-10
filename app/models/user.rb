@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  has_many :entries
   has_many :workouts
   has_many :exercises
   has_many :exercise_configs

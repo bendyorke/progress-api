@@ -1,4 +1,5 @@
 class Exercise < ActiveRecord::Base
+  has_many   :entries
   has_many   :exercises_muscle_groups
   has_many   :exercise_configs
   has_many   :follows, as: :followable

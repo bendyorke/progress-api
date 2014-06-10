@@ -3,8 +3,8 @@ gem 'rails', '4.0.1'
 gem 'pg'
 gem 'jbuilder', '~> 1.2'
 gem 'thin'
-gem 'rails-api'
 gem 'active_model_serializers'
+gem 'bcrypt'
 
 group :doc do
   gem 'sdoc', require: false

@@ -1,5 +1,4 @@
-class Api::V1::WorkoutsController < Api::V1::V1ApplicationController
-
+class WorkoutsController < ApplicationController
   def index
     @workouts = Workout.all
     render :json => @workouts

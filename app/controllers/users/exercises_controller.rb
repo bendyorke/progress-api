@@ -1,17 +1,18 @@
-class Api::V1::Users::ExercisesController < Api::V1::V1ApplicationController
+class Users::ExercisesController < ApplicationController
+  before_filter :authenticate_requests
 
   def index
-    @exercises = Exercise.where token_params
+    @exercises = current_user.exercises
     render :json => @exercises
   end
 
   def create
-    @exercise = Exercise.create exercise_params
+    @exercise = current_user.exercises.create exercise_params
     render :json => @exercise
   end
 
   def update
-    @exercise = Exercise.find params[:id]
+    @exercise = current_user.exercises.find params[:id]
     if @exercise.update exercise_params
       render :json => @exercise
     else

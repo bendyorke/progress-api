@@ -1,4 +1,4 @@
-class Api::V1::Users::Workouts::ExercisesController < Api::V1::V1ApplicationController
+class Users::Workouts::ExercisesController < ApplicationController
 
   def index
     @exercises = Exercise

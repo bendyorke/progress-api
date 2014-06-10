@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe Api::V1::Users::ExercisesController, :type => :controller do
+describe Users::ExercisesController, :type => :controller do
   context '#index' do
     it 'returns all workouts belonging to a user' do
       user = create :user_with_exercises
       create :user_with_exercises
-
+      authenticate user
       get :index, user_id: user.id
 
       json = successful_json_response
@@ -15,7 +15,9 @@ describe Api::V1::Users::ExercisesController, :type => :controller do
 
   context '#create' do
     it 'returns a workout with an id' do
-      post :create, exercise: build(:exercise).attributes
+      user = create :user
+      authenticate user
+      post :create, user_id: user.id, exercise: build(:exercise).attributes
 
       json = successful_json_response
       expect(json['exercise']).to have_key 'id'
@@ -23,7 +25,8 @@ describe Api::V1::Users::ExercisesController, :type => :controller do
 
     it 'saves the exercise to a user' do
       user = create :user
-      post :create, exercise: build(:exercise, user_id: user.id).attributes
+      authenticate user
+      post :create, user_id: user.id, exercise: build(:exercise, user_id: user.id).attributes
 
       json = successful_json_response
       expect(json['exercise']['id']).to eq user.exercises.last.id
@@ -32,10 +35,10 @@ describe Api::V1::Users::ExercisesController, :type => :controller do
 
   context '#update' do
     it 'can update basic attributes' do
-      exercise   = create :exercise
+      user = create :user_with_exercises
       attributes = build(:exercise).attributes.except("id")
-
-      put :update, id: exercise.id, exercise: attributes
+      authenticate user
+      put :update, user_id: user.id, id: user.exercises.last.id, exercise: attributes
 
       json = successful_json_response
       expect(json['exercise']['name']).to eq attributes['name']

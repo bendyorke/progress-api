@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::WorkoutsController, :type => :controller do
+describe WorkoutsController, :type => :controller do
 
   context '#index' do
     it 'returns a list of all workouts' do

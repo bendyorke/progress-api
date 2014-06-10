@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140525041527) do
+ActiveRecord::Schema.define(version: 20140607220118) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,10 +64,30 @@ ActiveRecord::Schema.define(version: 20140525041527) do
     t.datetime "updated_at"
   end
 
+  create_table "registrations", force: true do |t|
+    t.string   "strategy"
+    t.integer  "user_id"
+    t.hstore   "authorization"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tokens", force: true do |t|
+    t.string   "hex",                    null: false
+    t.integer  "active",     default: 1
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tokens", ["hex"], name: "index_tokens_on_hex", unique: true, using: :btree
+
   create_table "users", force: true do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.string   "gender"
+    t.string   "username"
+    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

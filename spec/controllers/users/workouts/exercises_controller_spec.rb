@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::Users::Workouts::ExercisesController, :type => :controller do
+describe Users::Workouts::ExercisesController, :type => :controller do
   context '#create' do
     it 'can add an exercise to a workout' do
       user     = create :user

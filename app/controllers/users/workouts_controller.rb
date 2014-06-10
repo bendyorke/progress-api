@@ -1,13 +1,13 @@
-class Api::V1::Users::WorkoutsController < Api::V1::V1ApplicationController
-
+class Users::WorkoutsController < ApplicationController
+  before_filter :authenticate_requests
   def index
-    @workouts = Workout.where token_params
+    @workouts = current_user.workouts
     render :json => @workouts
   end
 
   def create
     if fork_params_id
-      @workout = Workout.find(fork_params_id).fork(token_params[:user_id])
+      @workout = Workout.find(fork_params_id).fork(current_user.id)
     else
       @workout = Workout.create workout_params
     end

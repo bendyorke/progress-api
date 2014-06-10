@@ -6,6 +6,7 @@ guard 'spork', :rspec_env => { 'RAILS_ENV' => 'test' }, :quiet => true do
   watch('Gemfile.lock')
   watch('spec/spec_helper.rb') { :rspec }
   watch(%r{^spec/support/.+\.rb$})
+  watch('config/routes.rb') { :rspec }
 end
 
 guard :rspec, :cmd => "bundle exec rspec --drb" do

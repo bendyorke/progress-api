@@ -5,6 +5,7 @@ ProgressApi::Application.routes.draw do
                             controller: 'workouts/exercises'
     end
     resources :exercises,   only: %i[index create update]
+    resources :entries,     only: %i[create]
   end; end
 
   resources :workouts,      only: %i[index]

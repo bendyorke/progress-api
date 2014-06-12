@@ -1,5 +1,6 @@
 class ExercisesController < ApplicationController
    def index
-     render nothing: true
+     @exercises = Exercise.all
+     render :json => @exercises
    end
 end

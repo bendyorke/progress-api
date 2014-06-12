@@ -7,8 +7,8 @@ describe ExercisesController, :type => :controller do
 
       get :index
 
-      successful_response
-      expect(Exercise.all.count).to eq exercises.count
+      json = successful_json_response
+      expect(json['exercises'].count).to eq exercises.count
     end
   end
 end

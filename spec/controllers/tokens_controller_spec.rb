@@ -15,7 +15,7 @@ describe TokensController, :type => :controller do
       it 'returns unauthorized without proper authentication' do
         get :index, authentication: { strategy: 'password', email: 'boo', password: 'far' }
 
-        expect(response.status).to eq 401
+        expect(response.status).to eq 403
       end
     end
   end

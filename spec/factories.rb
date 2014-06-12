@@ -81,4 +81,10 @@ FactoryGirl.define do
   factory :token do
     association :user, factory: :user
   end
+
+  factory :entry do
+    association :user, factory: :user
+    association :workout, factory: :workout
+    association :exercise, factory: :exercise
+  end
 end

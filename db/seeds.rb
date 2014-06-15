@@ -7,12 +7,6 @@ def seeded arr, desc = nil
   puts "|| -> %02d %-68s||" %[arr.count, "#{desc || plural_class} seeded"]
   puts "\n\n".rjust 81, "-"
 end
-# Create Muscle Groups
-#
-muscle_groups = %w[chest triceps biceps back legs abs].map do |muscle_group|
-  MuscleGroup.create name: muscle_group
-end
-seeded muscle_groups
 
 # Create exercises
 #
@@ -68,22 +62,4 @@ users += (4..9).map do
                   gender: %w|male female|.sample
 end
 seeded users
-
-# Create follows
-#
-follows = users.map.with_index do |user|
-  workouts.sample.followers.push user
-  exercises.sample(3).each { |_| _.followers.push user }
-  (users - [user]).sample.followers.push user
-  user.followings.to_a
-end.flatten
-seeded follows
-
-# Fork a workout
-#
-fork = workouts.sample.fork(user_id: users.first.id)
-seeded [fork], "Forked Workout"
-
-# Configure an exercise
-#
 

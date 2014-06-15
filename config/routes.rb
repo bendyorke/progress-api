@@ -1,7 +1,7 @@
 ProgressApi::Application.routes.draw do
   resources :users do; namespace :users do
     resources :workouts,    only: %i[index create update] do
-      resources :exercises, only: %i[index create],
+      resources :exercises, only: %i[index create update],
                             controller: 'workouts/exercises'
     end
     resources :exercises,   only: %i[index create update]

@@ -3,7 +3,7 @@ module Authenticatable
 
   module ClassMethods
     def authenticate! params
-      case params[:strategy]
+      case params.fetch :strategy
       when 'password' then return password_authenticate! params
       end
       return false

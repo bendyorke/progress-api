@@ -5,6 +5,7 @@ gem 'jbuilder', '~> 1.2'
 gem 'thin'
 gem 'active_model_serializers'
 gem 'bcrypt'
+gem 'rails_12factor'
 
 group :doc do
   gem 'sdoc', require: false

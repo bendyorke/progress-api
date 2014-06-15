@@ -6,6 +6,7 @@ gem 'thin'
 gem 'active_model_serializers'
 gem 'bcrypt'
 gem 'rails_12factor'
+gem 'faker'
 
 group :doc do
   gem 'sdoc', require: false
@@ -14,7 +15,6 @@ end
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'faker'
   gem 'guard'
   gem 'guard-rspec'
   gem 'guard-bundler'
